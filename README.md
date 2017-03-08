@@ -1,1 +1,1 @@
-# kakfa-project
+Sample project to learn Kafka
