@@ -13,7 +13,7 @@ public class ProductIdSerializer implements Serializer<ProductId> {
 
     private static final int bufferSize = 2048;
 
-    private final Schema productIdSchema = RuntimeSchema.getSchema(ProductId.class);
+    private final Schema<ProductId> productIdSchema = RuntimeSchema.getSchema(ProductId.class);
 
     public byte[] serialize(String topic, ProductId productId) {
         try {
