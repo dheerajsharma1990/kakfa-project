@@ -2,11 +2,11 @@ package com.dheeraj.kafka.producer.domain;
 
 import java.io.Serializable;
 
-public class ProductId implements Serializable {
+public class MobileId implements Serializable {
 
     private final String productId;
 
-    public ProductId(String productId) {
+    public MobileId(String productId) {
         this.productId = productId;
     }
 
@@ -15,9 +15,9 @@ public class ProductId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ProductId productId1 = (ProductId) o;
+        MobileId mobileId1 = (MobileId) o;
 
-        return productId != null ? productId.equals(productId1.productId) : productId1.productId == null;
+        return productId != null ? productId.equals(mobileId1.productId) : mobileId1.productId == null;
 
     }
 
@@ -28,7 +28,7 @@ public class ProductId implements Serializable {
 
     @Override
     public String toString() {
-        return "ProductId{" +
+        return "MobileId{" +
                 "productId='" + productId + '\'' +
                 '}';
     }

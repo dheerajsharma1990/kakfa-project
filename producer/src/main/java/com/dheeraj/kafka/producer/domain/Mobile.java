@@ -2,14 +2,14 @@ package com.dheeraj.kafka.producer.domain;
 
 import java.io.Serializable;
 
-public class Product implements Serializable {
+public class Mobile implements Serializable {
 
-    private final ProductId productId;
+    private final MobileId mobileId;
 
     private final String productName;
 
-    public Product(ProductId productId, String productName) {
-        this.productId = productId;
+    public Mobile(MobileId mobileId, String productName) {
+        this.mobileId = mobileId;
         this.productName = productName;
     }
 
@@ -18,21 +18,21 @@ public class Product implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Product product = (Product) o;
+        Mobile mobile = (Mobile) o;
 
-        return productId != null ? productId.equals(product.productId) : product.productId == null;
+        return mobileId != null ? mobileId.equals(mobile.mobileId) : mobile.mobileId == null;
 
     }
 
     @Override
     public int hashCode() {
-        return productId != null ? productId.hashCode() : 0;
+        return mobileId != null ? mobileId.hashCode() : 0;
     }
 
     @Override
     public String toString() {
-        return "Product{" +
-                "productId=" + productId +
+        return "Mobile{" +
+                "mobileId=" + mobileId +
                 ", productName='" + productName + '\'' +
                 '}';
     }

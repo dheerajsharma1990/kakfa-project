@@ -1,6 +1,6 @@
 package com.dheeraj.kafka.producer.serializers;
 
-import com.dheeraj.kafka.producer.domain.Product;
+import com.dheeraj.kafka.producer.domain.Mobile;
 import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtostuffIOUtil;
 import io.protostuff.Schema;
@@ -9,15 +9,15 @@ import org.apache.kafka.common.serialization.Serializer;
 
 import java.util.Map;
 
-public class ProductSerializer implements Serializer<Product> {
+public class MobileSerializer implements Serializer<Mobile> {
 
     private static final int bufferSize = 2048;
 
-    private final Schema productSchema = RuntimeSchema.getSchema(Product.class);
+    private final Schema productSchema = RuntimeSchema.getSchema(Mobile.class);
 
-    public byte[] serialize(String topic, Product product) {
+    public byte[] serialize(String topic, Mobile mobile) {
         try {
-            return ProtostuffIOUtil.toByteArray(product, productSchema,
+            return ProtostuffIOUtil.toByteArray(mobile, productSchema,
                     getApplicationBuffer());
         } finally {
             getApplicationBuffer().clear();
