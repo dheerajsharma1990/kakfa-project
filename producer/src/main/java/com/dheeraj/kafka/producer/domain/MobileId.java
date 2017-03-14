@@ -1,8 +1,6 @@
 package com.dheeraj.kafka.producer.domain;
 
-import java.io.Serializable;
-
-public class MobileId implements Serializable {
+public class MobileId implements DomainId<MobileId> {
 
     private final String productId;
 
@@ -31,5 +29,10 @@ public class MobileId implements Serializable {
         return "MobileId{" +
                 "productId='" + productId + '\'' +
                 '}';
+    }
+
+    @Override
+    public MobileId getId() {
+        return this;
     }
 }

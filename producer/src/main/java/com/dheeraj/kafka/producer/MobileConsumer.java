@@ -13,7 +13,7 @@ import java.util.Properties;
 public class MobileConsumer {
 
     public static void main(String[] argv) throws Exception {
-        String topicName = "MY_PRODUCT";
+        String topicName = "MOBILES";
         String groupId = "mygroup";
 
         Properties productConsumerProperties = new Properties();
@@ -23,11 +23,11 @@ public class MobileConsumer {
         productConsumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         productConsumerProperties.put(ConsumerConfig.CLIENT_ID_CONFIG, "simple");
 
-        KafkaConsumer<MobileId, Mobile> productKafkaConsumer = new KafkaConsumer<MobileId, Mobile>(productConsumerProperties);
+        KafkaConsumer<MobileId, Mobile> productKafkaConsumer = new KafkaConsumer<>(productConsumerProperties);
         productKafkaConsumer.subscribe(Arrays.asList(topicName));
         ConsumerRecords<MobileId, Mobile> productRecords = productKafkaConsumer.poll(1000);
-        for(ConsumerRecord<MobileId,Mobile> consumerRecord : productRecords) {
-            System.out.println(consumerRecord.value());
+        for (ConsumerRecord<MobileId, Mobile> consumerRecord : productRecords) {
+            System.out.println("Value: " + consumerRecord.value() + " Offset: " + consumerRecord.offset());
         }
         productKafkaConsumer.close();
     }

@@ -1,8 +1,6 @@
 package com.dheeraj.kafka.producer.domain;
 
-import java.io.Serializable;
-
-public class Mobile implements Serializable {
+public class Mobile implements Domain<Mobile> {
 
     private final MobileId mobileId;
 
@@ -35,5 +33,10 @@ public class Mobile implements Serializable {
                 "mobileId=" + mobileId +
                 ", productName='" + productName + '\'' +
                 '}';
+    }
+
+    @Override
+    public Mobile getDomainObject() {
+        return this;
     }
 }
