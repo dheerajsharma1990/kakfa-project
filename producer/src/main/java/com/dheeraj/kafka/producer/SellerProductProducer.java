@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.Future;
 
-public class MobileProducer {
+public class SellerProductProducer {
 
     private static final String sellerProductTopic = "SELLER_PRODUCT";
 
@@ -18,10 +18,11 @@ public class MobileProducer {
             MobileId mobileId = new MobileId("MOB001");
             SellerId sellerId = new SellerId("SELLER1");
             SellerProductId sellerProductId = new SellerProductId(sellerId, mobileId);
-            SellerProduct sellerProduct = new SellerProduct(sellerProductId, 499);
+            SellerProduct sellerProduct = new SellerProduct(sellerProductId, 489);
             Future<RecordMetadata> recordMetadataFuture = sendSellerProduct(sellerProductId, sellerProduct, producer);
             RecordMetadata recordMetadata = recordMetadataFuture.get();
             System.out.println("Timestamp of record in Kafka " + new Date(recordMetadata.timestamp()));
+            System.out.println("Sent To Partition " + recordMetadata.partition());
         } finally {
             producer.close();
         }
@@ -37,6 +38,7 @@ public class MobileProducer {
         configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "com.dheeraj.kafka.producer.serializers.DomainIdSerializer");
         configProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "com.dheeraj.kafka.producer.serializers.DomainSerializer");
+        configProperties.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, "com.dheeraj.kafka.producer.partitioner.SellerProductPartitioner");
         return configProperties;
     }
 

@@ -20,6 +20,7 @@ public class SellerProductConsumer {
         productConsumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         productConsumerProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "com.dheeraj.kafka.producer.serializers.deserializers.SellerProductIdDeserializer");
         productConsumerProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "com.dheeraj.kafka.producer.serializers.deserializers.SellerProductDeserializer");
+        productConsumerProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "com.dheeraj.kafka.producer.serializers.deserializers.SellerProductDeserializer");
         productConsumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         productConsumerProperties.put(ConsumerConfig.CLIENT_ID_CONFIG, "simple");
 
