@@ -10,16 +10,16 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import java.util.Arrays;
 import java.util.Properties;
 
-public class MobileConsumer {
+public class SellerProductConsumer {
 
     public static void main(String[] argv) throws Exception {
-        String topicName = "MOBILES";
-        String groupId = "mygroup";
+        String topicName = "SELLER_PRODUCT";
+        String groupId = "sellerProductGroup";
 
         Properties productConsumerProperties = new Properties();
         productConsumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        productConsumerProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "com.dheeraj.kafka.producer.serializers.deserializers.MobileIdDeserializer");
-        productConsumerProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "com.dheeraj.kafka.producer.serializers.deserializers.MobileDeserializer");
+        productConsumerProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "com.dheeraj.kafka.producer.serializers.deserializers.SellerProductIdDeserializer");
+        productConsumerProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "com.dheeraj.kafka.producer.serializers.deserializers.SellerProductDeserializer");
         productConsumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         productConsumerProperties.put(ConsumerConfig.CLIENT_ID_CONFIG, "simple");
 

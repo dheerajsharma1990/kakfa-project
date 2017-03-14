@@ -1,4 +1,4 @@
-package com.dheeraj.kafka.producer.serializers;
+package com.dheeraj.kafka.producer.serializers.deserializers;
 
 import com.dheeraj.kafka.producer.domain.Mobile;
 import io.protostuff.ProtostuffIOUtil;

@@ -1,8 +1,6 @@
 package com.dheeraj.kafka.producer.domain;
 
-import java.io.Serializable;
-
-public class Seller implements Serializable {
+public class Seller implements Domain<Seller> {
 
     private final SellerId sellerId;
 
@@ -35,5 +33,10 @@ public class Seller implements Serializable {
                 "sellerId=" + sellerId +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    @Override
+    public Seller getDomainObject() {
+        return this;
     }
 }
