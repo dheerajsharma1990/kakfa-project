@@ -12,6 +12,7 @@
 
     <modules>
         <module>producer</module>
+        <module>gsm-choice-grabber</module>
     </modules>
 
     <build>
@@ -25,7 +26,6 @@
                     <maxmem>1024m</maxmem>
                     <meminitial>128m</meminitial>
                 </configuration>
-
             </plugin>
         </plugins>
     </build>
