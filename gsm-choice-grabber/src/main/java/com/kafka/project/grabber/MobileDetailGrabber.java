@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class MobileDetailGrabber {
 
+
     private Map<String, String> grab() throws Exception {
         Map<String, String> map = new HashMap<>();
         Document doc = Jsoup.connect("http://www.gsmchoice.com/en/catalogue/gionee/a1plus/Gionee-A1-Plus.html").get();

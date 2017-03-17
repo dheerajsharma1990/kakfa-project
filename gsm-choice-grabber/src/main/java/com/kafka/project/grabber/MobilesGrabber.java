@@ -5,33 +5,41 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MobilesGrabber {
 
-    //doc.body().select("#main-con").select("div.large-12.medium-12.small-12.columns").select("#NextPrevSelector").select("ul.pagination").first().select("li").select("a.1NPSa")
-    public static void main(String[] args) throws Exception {
-        String baseUrl = "http://www.gsmchoice.com";
+    private static final String baseUrl = "http://www.gsmchoice.com";
 
-        String brandUrl = "/en/catalogue/samsung";
-
-        Set<String> allUrls = new HashSet<>();
-        while (true) {
-            Document doc = Jsoup.connect("http://www.gsmchoice.com" + baseUrl).get();
-            Element first = doc.body().select("#main-con").select("#NextPrevSelector").first().select("ul.pagination").first();
-            if (first == null) {
-                break;
+    private static void something(String url, List<String> phoneUrls) throws Exception {
+        Document document = Jsoup.connect(baseUrl + url).get();
+        Elements elements = document.body().select("#main-con").select("li.phone-small-box-list").select("a");
+        phoneUrls.addAll(elements.stream().map(element -> element.attr("href")).collect(Collectors.toList()));
+        Element nextPreviousSelector = document.body().select("#main-con").select("#NextPrevSelector").first();
+        Element pagination = nextPreviousSelector.select("ul.pagination").first();
+        if (pagination != null) {
+            Element lastLi = pagination.select("li").last();
+            if (lastLi.className().equals("arrow")) {
+                something(lastLi.select("a").first().attr("href"), phoneUrls);
             }
-            Elements elements = first.select("a.1NPSa");
-            Set<String> sets = elements.stream().map(element -> element.attr("href")).collect(Collectors.toSet());
-
-
         }
+    }
 
-
+    public static void main(String[] args) throws Exception {
+        MobileBrandsGrabber mobileBrandsGrabber = new MobileBrandsGrabber();
+        Map<String, String> brandUrls = mobileBrandsGrabber.getBrandUrls();
+        Map<String, List<String>> allPhonesMap = new HashMap<>();
+        for (Map.Entry<String, String> brandUrl : brandUrls.entrySet()) {
+            List<String> allPhones = new ArrayList<>();
+            something(brandUrl.getValue(), allPhones);
+            allPhonesMap.put(brandUrl.getKey(), allPhones);
+        }
         System.out.println();
     }
+
 
 }
