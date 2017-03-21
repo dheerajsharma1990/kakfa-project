@@ -15,7 +15,7 @@ public class MobilesGrabber {
 
     private static final String baseUrl = "http://www.gsmchoice.com";
 
-    private static void something(String url, List<String> phoneUrls) throws Exception {
+    public void something(String url, List<String> phoneUrls) throws Exception {
         Document document = Jsoup.connect(baseUrl + url).get();
         Elements elements = document.body().select("#main-con").select("li.phone-small-box-list").select("a");
         phoneUrls.addAll(elements.stream().map(element -> element.attr("href")).collect(Collectors.toList()));
@@ -31,11 +31,12 @@ public class MobilesGrabber {
 
     public static void main(String[] args) throws Exception {
         MobileBrandsGrabber mobileBrandsGrabber = new MobileBrandsGrabber();
+        MobilesGrabber mobilesGrabber = new MobilesGrabber();
         Map<String, String> brandUrls = mobileBrandsGrabber.getBrandUrls();
         Map<String, List<String>> allPhonesMap = new HashMap<>();
         for (Map.Entry<String, String> brandUrl : brandUrls.entrySet()) {
             List<String> allPhones = new ArrayList<>();
-            something(brandUrl.getValue(), allPhones);
+            mobilesGrabber.something(brandUrl.getValue(), allPhones);
             allPhonesMap.put(brandUrl.getKey(), allPhones);
         }
         System.out.println();
