@@ -1,15 +1,23 @@
 package com.kafka.project.grabber;
 
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
+import com.kafka.project.domain.AllMobiles;
+import io.protostuff.ProtostuffIOUtil;
+import io.protostuff.Schema;
+import io.protostuff.runtime.RuntimeSchema;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class ReadData {
 
     public static void main(String[] args) throws Exception {
-        FileInputStream fileInputStream = new FileInputStream("mobile.data");
-        ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-        Object object = objectInputStream.readObject();
-        objectInputStream.close();
-        fileInputStream.close();
+        Schema<AllMobiles> schema = RuntimeSchema.getSchema(AllMobiles.class);
+        AllMobiles allMobiles = schema.newMessage();
+        System.out.println(System.currentTimeMillis());
+        byte[] bytes = Files.readAllBytes(Paths.get("mobileProto.data"));
+        System.out.println(System.currentTimeMillis());
+        ProtostuffIOUtil.mergeFrom(bytes, allMobiles, schema);
+        System.out.println(System.currentTimeMillis());
+        System.out.println();
     }
 }
