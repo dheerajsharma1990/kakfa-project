@@ -14,6 +14,18 @@ public class MobileRawData implements Serializable {
         this.attributes = attributes;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getAttributesSize() {
+        return attributes.size();
+    }
+
+    public Map<String, String> getAttributes() {
+        return attributes;
+    }
+
     @Override
     public String toString() {
         return "MobileRawData{" +

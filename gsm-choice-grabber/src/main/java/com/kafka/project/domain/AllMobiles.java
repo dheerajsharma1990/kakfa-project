@@ -11,6 +11,14 @@ public class AllMobiles implements Serializable {
         this.allMobiles = allMobiles;
     }
 
+    public int getSize() {
+        return allMobiles.size();
+    }
+
+    public List<MobileRawData> getAllMobiles() {
+        return allMobiles;
+    }
+
     @Override
     public String toString() {
         return "AllMobiles{" +
