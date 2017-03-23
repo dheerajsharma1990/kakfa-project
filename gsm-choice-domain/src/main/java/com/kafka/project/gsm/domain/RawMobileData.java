@@ -1,15 +1,15 @@
-package com.kafka.project.domain;
+package com.kafka.project.gsm.domain;
 
 import java.io.Serializable;
 import java.util.Map;
 
-public class MobileRawData implements Serializable {
+public class RawMobileData implements Serializable {
 
     private String name;
 
     private Map<String, String> attributes;
 
-    public MobileRawData(String name, Map<String, String> attributes) {
+    public RawMobileData(String name, Map<String, String> attributes) {
         this.name = name;
         this.attributes = attributes;
     }
@@ -18,13 +18,6 @@ public class MobileRawData implements Serializable {
         return name;
     }
 
-    public int getAttributesSize() {
-        return attributes.size();
-    }
-
-    public Map<String, String> getAttributes() {
-        return attributes;
-    }
 
     @Override
     public String toString() {
@@ -33,4 +26,5 @@ public class MobileRawData implements Serializable {
                 ", attributes=" + attributes +
                 '}';
     }
+
 }

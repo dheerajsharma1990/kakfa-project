@@ -13,6 +13,7 @@
     <modules>
         <module>producer</module>
         <module>gsm-choice-grabber</module>
+        <module>gsm-choice-domain</module>
     </modules>
 
     <build>

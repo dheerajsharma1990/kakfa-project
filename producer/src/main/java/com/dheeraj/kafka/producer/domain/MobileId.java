@@ -1,11 +1,11 @@
 package com.dheeraj.kafka.producer.domain;
 
-public class MobileId implements DomainId<MobileId> {
+public class MobileId  {
 
-    private final String productId;
+    private final String mobileId;
 
-    public MobileId(String productId) {
-        this.productId = productId;
+    public MobileId(String mobileId) {
+        this.mobileId = mobileId;
     }
 
     @Override
@@ -15,24 +15,19 @@ public class MobileId implements DomainId<MobileId> {
 
         MobileId mobileId1 = (MobileId) o;
 
-        return productId != null ? productId.equals(mobileId1.productId) : mobileId1.productId == null;
+        return mobileId != null ? mobileId.equals(mobileId1.mobileId) : mobileId1.mobileId == null;
 
     }
 
     @Override
     public int hashCode() {
-        return productId != null ? productId.hashCode() : 0;
+        return mobileId != null ? mobileId.hashCode() : 0;
     }
 
     @Override
     public String toString() {
         return "MobileId{" +
-                "productId='" + productId + '\'' +
+                "mobileId='" + mobileId + '\'' +
                 '}';
-    }
-
-    @Override
-    public MobileId getId() {
-        return this;
     }
 }

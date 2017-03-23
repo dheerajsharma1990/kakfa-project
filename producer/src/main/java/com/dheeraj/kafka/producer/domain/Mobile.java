@@ -1,14 +1,14 @@
 package com.dheeraj.kafka.producer.domain;
 
-public class Mobile implements Domain<Mobile> {
+public class Mobile  {
 
     private final MobileId mobileId;
 
-    private final String productName;
+    private final String mobileName;
 
-    public Mobile(MobileId mobileId, String productName) {
+    public Mobile(MobileId mobileId, String mobileName) {
         this.mobileId = mobileId;
-        this.productName = productName;
+        this.mobileName = mobileName;
     }
 
     @Override
@@ -31,12 +31,7 @@ public class Mobile implements Domain<Mobile> {
     public String toString() {
         return "Mobile{" +
                 "mobileId=" + mobileId +
-                ", productName='" + productName + '\'' +
+                ", mobileName='" + mobileName + '\'' +
                 '}';
-    }
-
-    @Override
-    public Mobile getDomainObject() {
-        return this;
     }
 }
