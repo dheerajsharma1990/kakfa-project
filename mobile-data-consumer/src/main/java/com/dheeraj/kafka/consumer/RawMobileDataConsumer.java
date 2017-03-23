@@ -1,4 +1,4 @@
-package com.dheeraj.kafka.producer;
+package com.dheeraj.kafka.consumer;
 
 import com.kafka.project.gsm.domain.RawMobileData;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -8,7 +8,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 import java.util.*;
 
-public class MobileConsumer {
+public class RawMobileDataConsumer {
 
     public static void main(String[] argv) throws Exception {
         String topicName = "MOBILES";

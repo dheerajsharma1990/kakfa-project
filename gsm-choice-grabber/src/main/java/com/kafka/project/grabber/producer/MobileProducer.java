@@ -1,4 +1,4 @@
-package com.kafka.project.producer;
+package com.kafka.project.grabber.producer;
 
 import com.kafka.project.grabber.ReadData;
 import com.kafka.project.gsm.domain.RawMobileData;
@@ -34,8 +34,8 @@ public class MobileProducer {
     private static Properties getMyProductTopicConfigProperties() {
         Properties configProperties = new Properties();
         configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "com.kafka.project.serializers.RawMobileDataIdSerializer");
-        configProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "com.kafka.project.serializers.RawMobileDataSerializer");
+        configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "com.kafka.project.grabber.serializers.RawMobileDataIdSerializer");
+        configProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "com.kafka.project.grabber.serializers.RawMobileDataSerializer");
         return configProperties;
     }
 

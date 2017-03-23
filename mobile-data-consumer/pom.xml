@@ -9,12 +9,12 @@
         <artifactId>kafka-project</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>producer</artifactId>
+    <artifactId>mobile-data-consumer</artifactId>
     <packaging>jar</packaging>
 
-    <description>Producer</description>
+    <description>Mobile Data Consumer</description>
 
-    <name>producer</name>
+    <name>mobile-data-consumer</name>
 
     <dependencies>
         <dependency>

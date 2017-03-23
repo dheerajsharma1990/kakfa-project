@@ -1,4 +1,4 @@
-package com.dheeraj.kafka.producer.domain;
+package com.dheeraj.kafka.consumer.domain;
 
 public class Mobile  {
 

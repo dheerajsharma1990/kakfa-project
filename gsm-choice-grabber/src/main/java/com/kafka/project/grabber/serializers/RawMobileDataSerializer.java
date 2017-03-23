@@ -1,5 +1,6 @@
-package com.kafka.project.serializers;
+package com.kafka.project.grabber.serializers;
 
+import com.kafka.project.gsm.domain.RawMobileData;
 import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtostuffIOUtil;
 import io.protostuff.Schema;
@@ -8,10 +9,10 @@ import org.apache.kafka.common.serialization.Serializer;
 
 import java.util.Map;
 
-public class RawMobileDataIdSerializer implements Serializer<String> {
+public class RawMobileDataSerializer implements Serializer<RawMobileData> {
 
     private static final int bufferSize = 2048;
-    private static final Schema schema = RuntimeSchema.getSchema(String.class);
+    private static final Schema schema = RuntimeSchema.getSchema(RawMobileData.class);
 
     @Override
     public void configure(Map<String, ?> configs, boolean isKey) {
@@ -19,7 +20,7 @@ public class RawMobileDataIdSerializer implements Serializer<String> {
     }
 
     @Override
-    public byte[] serialize(String topic, String data) {
+    public byte[] serialize(String topic, RawMobileData data) {
         try {
             return ProtostuffIOUtil.toByteArray(data, schema,
                     getApplicationBuffer());

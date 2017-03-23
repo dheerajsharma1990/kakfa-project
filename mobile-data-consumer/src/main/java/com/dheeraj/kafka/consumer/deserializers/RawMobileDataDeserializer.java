@@ -1,4 +1,4 @@
-package com.dheeraj.kafka.producer.deserializers;
+package com.dheeraj.kafka.consumer.deserializers;
 
 import com.kafka.project.gsm.domain.RawMobileData;
 import io.protostuff.ProtostuffIOUtil;
