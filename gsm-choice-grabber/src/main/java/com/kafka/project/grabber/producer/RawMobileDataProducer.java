@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Future;
 
-public class MobileProducer {
+public class RawMobileDataProducer {
 
     private static final String mobilesTopic = "MOBILES";
 
