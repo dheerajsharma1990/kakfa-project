@@ -26,7 +26,7 @@ public class ReadData {
         Schema<AllMobiles> schema = RuntimeSchema.getSchema(AllMobiles.class);
 
         AllMobiles allMobiles = schema.newMessage();
-        byte[] bytes = Files.readAllBytes(Paths.get("mobileProto.data"));
+        byte[] bytes = Files.readAllBytes(Paths.get(ReadData.class.getClassLoader().getResource("mobileProto.data").toURI()));
         ProtostuffIOUtil.mergeFrom(bytes, allMobiles, schema);
         return allMobiles.getRawMobileData();
     }
