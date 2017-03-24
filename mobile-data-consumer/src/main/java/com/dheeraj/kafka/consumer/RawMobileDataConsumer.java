@@ -20,25 +20,30 @@ public class RawMobileDataConsumer {
         productConsumerProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "com.dheeraj.kafka.producer.deserializers.RawMobileDataIdDeserializer");
         productConsumerProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "com.dheeraj.kafka.producer.deserializers.RawMobileDataDeserializer");
         productConsumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
-        productConsumerProperties.put(ConsumerConfig.CLIENT_ID_CONFIG, "simple");;
+        productConsumerProperties.put(ConsumerConfig.CLIENT_ID_CONFIG, "simple");
+        ;
 
         KafkaConsumer<String, RawMobileData> productKafkaConsumer = new KafkaConsumer<>(productConsumerProperties);
         List<RawMobileData> rawMobileDatas = new ArrayList<>();
+        long startTime = 0l;
+        long endTime = 0l;
         try {
             productKafkaConsumer.assign(Arrays.asList(new TopicPartition(topicName, 0)));
             productKafkaConsumer.seekToBeginning(Arrays.asList(new TopicPartition(topicName, 0)));
             while (true) {
-                ConsumerRecords<String, RawMobileData> rawMobileDataConsumerRecords = productKafkaConsumer.poll(1000);
+                ConsumerRecords<String, RawMobileData> rawMobileDataConsumerRecords = productKafkaConsumer.poll(300);
                 if (!rawMobileDataConsumerRecords.isEmpty()) {
-                    System.out.println("Started consuming raw mobile data at " + new Date());
+                    startTime = startTime == 0l ? System.currentTimeMillis() : startTime;
                     for (ConsumerRecord<String, RawMobileData> record : rawMobileDataConsumerRecords) {
                         rawMobileDatas.add(record.value());
                     }
-                    System.out.println("Consumed raw mobiles data at " + new Date());
-                    System.out.println("Total Records " + rawMobileDatas.size());
+                } else {
+                    endTime = System.currentTimeMillis();
+                    break;
                 }
             }
         } finally {
+            System.out.println("Time taken to consume all records " + (endTime - startTime) + " millis.");
             productKafkaConsumer.close();
         }
 
