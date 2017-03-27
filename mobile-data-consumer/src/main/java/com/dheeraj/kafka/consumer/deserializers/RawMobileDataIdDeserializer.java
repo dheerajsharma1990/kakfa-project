@@ -1,6 +1,5 @@
 package com.dheeraj.kafka.consumer.deserializers;
 
-import io.protostuff.ProtostuffIOUtil;
 import io.protostuff.Schema;
 import io.protostuff.runtime.RuntimeSchema;
 import org.apache.kafka.common.serialization.Deserializer;
@@ -16,9 +15,7 @@ public class RawMobileDataIdDeserializer implements Deserializer<String> {
     }
 
     public String deserialize(String topic, byte[] data) {
-        String mobileId = mobileIdSchema.newMessage();
-        ProtostuffIOUtil.mergeFrom(data, mobileId, mobileIdSchema);
-        return mobileId;
+        return "";
     }
 
     public void close() {
