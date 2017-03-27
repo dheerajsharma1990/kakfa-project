@@ -7,12 +7,15 @@ import io.protostuff.Schema;
 import io.protostuff.runtime.RuntimeSchema;
 import org.apache.kafka.common.serialization.Serializer;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Map;
+import java.util.zip.GZIPOutputStream;
 
 public class RawMobileDataSerializer implements Serializer<RawMobileData> {
 
     private static final int bufferSize = 2048;
-    private static final Schema schema = RuntimeSchema.getSchema(RawMobileData.class);
+    private static final Schema rawMobileDataSchema = RuntimeSchema.getSchema(RawMobileData.class);
 
     @Override
     public void configure(Map<String, ?> configs, boolean isKey) {
@@ -22,11 +25,24 @@ public class RawMobileDataSerializer implements Serializer<RawMobileData> {
     @Override
     public byte[] serialize(String topic, RawMobileData data) {
         try {
-            return ProtostuffIOUtil.toByteArray(data, schema, getApplicationBuffer());
+            return compress(ProtostuffIOUtil.toByteArray(data, rawMobileDataSchema, getApplicationBuffer()));
         } finally {
             getApplicationBuffer().clear();
         }
     }
+
+    private byte[] compress(byte[] content) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        try {
+            GZIPOutputStream gzipOutputStream = new GZIPOutputStream(byteArrayOutputStream);
+            gzipOutputStream.write(content);
+            gzipOutputStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return byteArrayOutputStream.toByteArray();
+    }
+
 
     @Override
     public void close() {
