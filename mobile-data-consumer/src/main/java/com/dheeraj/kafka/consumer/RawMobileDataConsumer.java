@@ -31,7 +31,7 @@ public class RawMobileDataConsumer {
         try {
             //productKafkaConsumer.subscribe(Arrays.asList(topicName));
             productKafkaConsumer.assign(Arrays.asList(new TopicPartition(topicName, 0)));
-            productKafkaConsumer.seek(new TopicPartition(topicName, 0), 0);
+            productKafkaConsumer.seek(new TopicPartition(topicName, 0), 13998 + 13998);
             long startTime = System.currentTimeMillis();
             while (rawMobileDatas.size() != 13998) {
                 ConsumerRecords<String, RawMobileData> rawMobileDataConsumerRecords = productKafkaConsumer.poll(200);

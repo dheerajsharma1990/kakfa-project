@@ -6,10 +6,7 @@ import io.protostuff.Schema;
 import io.protostuff.runtime.RuntimeSchema;
 import org.apache.kafka.common.serialization.Serializer;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.Map;
-import java.util.zip.GZIPOutputStream;
 
 public class RawMobileDataIdSerializer implements Serializer<String> {
 
@@ -24,16 +21,7 @@ public class RawMobileDataIdSerializer implements Serializer<String> {
     @Override
     public byte[] serialize(String topic, String data) {
         try {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            GZIPOutputStream gzipOutputStream = new GZIPOutputStream(byteArrayOutputStream);
-            gzipOutputStream.write(ProtostuffIOUtil.toByteArray(data, schema, getApplicationBuffer()));
-            byte[] bytes = byteArrayOutputStream.toByteArray();
-            gzipOutputStream.close();
-            byteArrayOutputStream.close();
-            return bytes;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new byte[0];
+            return ProtostuffIOUtil.toByteArray(data, schema, getApplicationBuffer());
         } finally {
             getApplicationBuffer().clear();
         }
