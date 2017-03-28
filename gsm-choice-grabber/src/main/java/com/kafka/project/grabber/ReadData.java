@@ -5,7 +5,11 @@ import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtostuffIOUtil;
 import io.protostuff.Schema;
 import io.protostuff.runtime.RuntimeSchema;
+import net.jpountz.lz4.LZ4Compressor;
+import net.jpountz.lz4.LZ4Factory;
+import net.jpountz.lz4.LZ4FastDecompressor;
 import org.apache.commons.io.IOUtils;
+import org.xerial.snappy.Snappy;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -55,16 +59,31 @@ public class ReadData {
             getApplicationBuffer().clear();
         }
 
+        System.out.println("Size to compress " + getSize(protoBytes));
+
+
         long startTime = System.currentTimeMillis();
-        List<byte[]> bytes = protoBytes.stream().map(b -> compress(b)).collect(Collectors.toList());
+        List<byte[]> bytes = protoBytes.stream().map(b -> compressSnappy(b)).collect(Collectors.toList());
         long endTime = System.currentTimeMillis();
         System.out.println("Time to compress " + (endTime - startTime) + " millis.");
+        System.out.println("Size now " + getSize(bytes));
 
         startTime = System.currentTimeMillis();
-        List<byte[]> uncompressed = bytes.stream().map(b -> decompress(b)).collect(Collectors.toList());
+        List<byte[]> uncompressed = new ArrayList<>();
+        for (int i = 0; i < bytes.size(); i++) {
+            uncompressed.add(decompressSnappy(bytes.get(i)));
+        }
         endTime = System.currentTimeMillis();
         System.out.println("Time to decompress " + (endTime - startTime) + " millis.");
+        System.out.println("Size after " + getSize(uncompressed));
 
+    }
+
+    private static int getSize(List<byte[]> protoBytes) {
+        return protoBytes.stream()
+                .map(bytes -> bytes.length)
+                .reduce((a, b) -> a + b)
+                .get();
     }
 
     private static byte[] decompress(byte[] data) {
@@ -87,6 +106,39 @@ public class ReadData {
             throw new RuntimeException(e);
         }
         return byteArrayOutputStream.toByteArray();
+    }
+
+    private static byte[] compressLZ4(byte[] content) {
+        LZ4Factory factory = LZ4Factory.fastestInstance();
+        LZ4Compressor compressor = factory.highCompressor(5);
+        int maxCompressedLength = compressor.maxCompressedLength(content.length);
+        byte[] compressed = new byte[maxCompressedLength];
+        compressor.compress(content, 0, content.length, compressed, 0, maxCompressedLength);
+        return compressed;
+    }
+
+    private static byte[] decompressLZ4(byte[] data, int length) {
+        LZ4Factory factory = LZ4Factory.fastestInstance();
+        LZ4FastDecompressor decompressor = factory.fastDecompressor();
+        byte[] restored = new byte[length];
+        decompressor.decompress(data, 0, restored, 0, length);
+        return restored;
+    }
+
+    private static byte[] compressSnappy(byte[] content) {
+        try {
+            return Snappy.compress(content);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static byte[] decompressSnappy(byte[] content) throws Exception {
+        try {
+            return Snappy.uncompress(content);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static LinkedBuffer getApplicationBuffer() {
