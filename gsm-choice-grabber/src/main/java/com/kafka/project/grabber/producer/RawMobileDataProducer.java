@@ -4,7 +4,6 @@ import com.kafka.project.grabber.ReadData;
 import com.kafka.project.gsm.domain.RawMobileData;
 import org.apache.kafka.clients.producer.*;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Future;
@@ -19,13 +18,14 @@ public class RawMobileDataProducer {
         ReadData readData = new ReadData();
         List<RawMobileData> rawMobileDataList = readData.getData();
         try {
-            System.out.println("Starting Sending Raw Mobiles at " + new Date());
+            long startTime = System.currentTimeMillis();
             for (RawMobileData rawMobileData : rawMobileDataList) {
                 ProducerRecord<String, RawMobileData> rawMobileDataProducerRecord = new ProducerRecord<>(mobilesTopic, rawMobileData.getName(), rawMobileData);
                 Future<RecordMetadata> future = producer.send(rawMobileDataProducerRecord);
                 RecordMetadata recordMetadata = future.get();
             }
-            System.out.println("Sent " + rawMobileDataList.size() + " records at " + new Date());
+            long endTime = System.currentTimeMillis();
+            System.out.println("Sent " + rawMobileDataList.size() + " records in " + (endTime - startTime) + " millis.");
         } finally {
             producer.close();
         }

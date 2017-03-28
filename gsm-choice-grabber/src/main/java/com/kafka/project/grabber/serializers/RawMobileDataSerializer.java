@@ -26,19 +26,24 @@ public class RawMobileDataSerializer implements Serializer<RawMobileData> {
     public byte[] serialize(String topic, RawMobileData data) {
         try {
             return compress(ProtostuffIOUtil.toByteArray(data, rawMobileDataSchema, getApplicationBuffer()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         } finally {
             getApplicationBuffer().clear();
         }
     }
 
-    private byte[] compress(byte[] content) {
+    private byte[] compress(byte[] content) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try {
             GZIPOutputStream gzipOutputStream = new GZIPOutputStream(byteArrayOutputStream);
-            gzipOutputStream.write(content);
-            gzipOutputStream.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            try {
+                gzipOutputStream.write(content);
+            } finally {
+                gzipOutputStream.close();
+            }
+        } finally {
+            byteArrayOutputStream.close();
         }
         return byteArrayOutputStream.toByteArray();
     }

@@ -19,17 +19,17 @@ public class RawMobileDataDeserializer implements Deserializer<RawMobileData> {
 
     public RawMobileData deserialize(String topic, byte[] data) {
         RawMobileData rawMobileData = rawMobileDataSchema.newMessage();
-        ProtostuffIOUtil.mergeFrom(decompress(data), rawMobileData, rawMobileDataSchema);
-        return rawMobileData;
-    }
-
-    private byte[] decompress(byte[] data) {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
-            IOUtils.copy(new GZIPInputStream(new ByteArrayInputStream(data)), out);
+            ProtostuffIOUtil.mergeFrom(decompress(data), rawMobileData, rawMobileDataSchema);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return rawMobileData;
+    }
+
+    private byte[] decompress(byte[] data) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        IOUtils.copy(new GZIPInputStream(new ByteArrayInputStream(data)), out);
         return out.toByteArray();
     }
 

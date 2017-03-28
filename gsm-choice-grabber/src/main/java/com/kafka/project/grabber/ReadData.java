@@ -39,7 +39,6 @@ public class ReadData {
 
     public List<RawMobileData> getData() throws Exception {
         Schema<AllMobiles> schema = RuntimeSchema.getSchema(AllMobiles.class);
-
         AllMobiles allMobiles = schema.newMessage();
         long startTime = System.currentTimeMillis();
         byte[] bytes = Files.readAllBytes(Paths.get(ReadData.class.getClassLoader().getResource("mobileProto.data").toURI()));
