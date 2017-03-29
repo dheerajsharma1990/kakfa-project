@@ -9,12 +9,15 @@ import org.apache.kafka.common.serialization.Serializer;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.zip.GZIPOutputStream;
 
 public class RawMobileDataIdSerializer implements Serializer<String> {
 
     private static final int bufferSize = 2048;
     private static final Schema<String> mobileIdSchema = RuntimeSchema.getSchema(String.class);
+    public static AtomicLong serializationTime = new AtomicLong(0l);
+    public static AtomicLong compressionTime = new AtomicLong(0l);
 
     @Override
     public void configure(Map<String, ?> configs, boolean isKey) {
@@ -24,10 +27,17 @@ public class RawMobileDataIdSerializer implements Serializer<String> {
     @Override
     public byte[] serialize(String topic, String data) {
         try {
-            return compress(ProtostuffIOUtil.toByteArray(data, mobileIdSchema, getApplicationBuffer()));
-        } catch (IOException e) {
+            long startTime = System.currentTimeMillis();
+            byte[] serialized = ProtostuffIOUtil.toByteArray(data, mobileIdSchema, getApplicationBuffer());
+            long endTime = System.currentTimeMillis();
+            serializationTime.addAndGet(endTime - startTime);
+            //byte[] compressed = compress(serialized);
+            startTime = System.currentTimeMillis();
+            //compressionTime.addAndGet(startTime - endTime);
+            return serialized;
+        } /*catch (IOException e) {
             throw new RuntimeException(e);
-        } finally {
+        } */finally {
             getApplicationBuffer().clear();
         }
     }

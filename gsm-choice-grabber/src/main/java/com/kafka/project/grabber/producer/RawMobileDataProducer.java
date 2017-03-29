@@ -1,6 +1,8 @@
 package com.kafka.project.grabber.producer;
 
 import com.kafka.project.grabber.ReadData;
+import com.kafka.project.grabber.serializers.RawMobileDataIdSerializer;
+import com.kafka.project.grabber.serializers.RawMobileDataSerializer;
 import com.kafka.project.gsm.domain.RawMobileData;
 import org.apache.kafka.clients.producer.*;
 
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 public class RawMobileDataProducer {
 
@@ -18,6 +21,7 @@ public class RawMobileDataProducer {
         Producer producer = new KafkaProducer<>(myProductTopicConfigProperties);
         ReadData readData = new ReadData();
         List<RawMobileData> rawMobileDataList = readData.getData();
+        List<RawMobileData> splitRawMobileDataList = rawMobileDataList.stream().map(RawMobileData::splitIntoThree).flatMap(List::stream).collect(Collectors.toList());
         List<Future<RecordMetadata>> futures = new ArrayList<>();
         int count = 0;
         try {
@@ -31,7 +35,12 @@ public class RawMobileDataProducer {
                 count++;
             }
             long endTime = System.currentTimeMillis();
-            System.out.println("Sent " + count + " records in " + (endTime - startTime) + " millis.");
+            long totalTime = endTime - startTime;
+            long serializationTime = RawMobileDataIdSerializer.serializationTime.get() + RawMobileDataSerializer.serializationTime.get();
+            long compressionTime = RawMobileDataIdSerializer.compressionTime.get() + RawMobileDataSerializer.compressionTime.get();
+
+            System.out.println("Sent " + count + " records in " + totalTime + " millis out of which compression took " + compressionTime + " millis and serialization took " + serializationTime + " millis.");
+
         } finally {
             producer.close();
         }
@@ -42,8 +51,8 @@ public class RawMobileDataProducer {
         configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "com.kafka.project.grabber.serializers.RawMobileDataIdSerializer");
         configProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "com.kafka.project.grabber.serializers.RawMobileDataSerializer");
-        configProperties.put(ProducerConfig.LINGER_MS_CONFIG, "300");
-        configProperties.put(ProducerConfig.BATCH_SIZE_CONFIG, String.valueOf(1500 * 5000));
+        configProperties.put(ProducerConfig.LINGER_MS_CONFIG, "100");
+        configProperties.put(ProducerConfig.BATCH_SIZE_CONFIG, String.valueOf(2500 * 5000));
         configProperties.put(ProducerConfig.BUFFER_MEMORY_CONFIG, "2147483648");
         return configProperties;
     }
