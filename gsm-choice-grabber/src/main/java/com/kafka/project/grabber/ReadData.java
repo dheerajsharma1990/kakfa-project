@@ -62,15 +62,19 @@ public class ReadData {
 
 
         long startTime = System.currentTimeMillis();
-        List<byte[]> bytes = protoBytes.stream().map(b -> compressSnappy(b)).collect(Collectors.toList());
+        List<byte[]> bytes = protoBytes.stream().map(b -> compress(b)).collect(Collectors.toList());
+        int maxSize = bytes.stream().max((o1, o2) -> o1.length - o2.length).get().length;
+        int minSize = bytes.stream().min((o1, o2) -> o1.length - o2.length).get().length;
         long endTime = System.currentTimeMillis();
         System.out.println("Time to compress " + (endTime - startTime) + " millis.");
         System.out.println("Size now " + getSize(bytes));
+        System.out.println("Max Size of a message " + maxSize);
+        System.out.println("Min Size of a message " + minSize);
 
         startTime = System.currentTimeMillis();
         List<byte[]> uncompressed = new ArrayList<>();
         for (int i = 0; i < bytes.size(); i++) {
-            uncompressed.add(decompressSnappy(bytes.get(i)));
+            uncompressed.add(decompress(bytes.get(i)));
         }
         endTime = System.currentTimeMillis();
         System.out.println("Time to decompress " + (endTime - startTime) + " millis.");
