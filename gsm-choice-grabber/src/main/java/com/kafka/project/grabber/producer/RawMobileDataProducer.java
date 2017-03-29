@@ -22,24 +22,27 @@ public class RawMobileDataProducer {
         ReadData readData = new ReadData();
         List<RawMobileData> rawMobileDataList = readData.getData();
         List<RawMobileData> splitRawMobileDataList = rawMobileDataList.stream().map(RawMobileData::splitIntoThree).flatMap(List::stream).collect(Collectors.toList());
-        List<Future<RecordMetadata>> futures = new ArrayList<>();
-        int count = 0;
         try {
-            long startTime = System.currentTimeMillis();
-            for (RawMobileData rawMobileData : rawMobileDataList) {
-                ProducerRecord<String, RawMobileData> rawMobileDataProducerRecord = new ProducerRecord<>(mobilesTopic, rawMobileData.getName(), rawMobileData);
-                futures.add(producer.send(rawMobileDataProducerRecord));
+            long allTime = 0;
+            for (int i = 0; i < 10; i++) {
+                List<Future<RecordMetadata>> futures = new ArrayList<>();
+                int count = 0;
+                long startTime = System.currentTimeMillis();
+                for (RawMobileData rawMobileData : rawMobileDataList) {
+                    ProducerRecord<String, RawMobileData> rawMobileDataProducerRecord = new ProducerRecord<>(mobilesTopic, rawMobileData.getName(), rawMobileData);
+                    futures.add(producer.send(rawMobileDataProducerRecord));
+                }
+                for (Future<RecordMetadata> future : futures) {
+                    future.get();
+                    count++;
+                }
+                long endTime = System.currentTimeMillis();
+                long sendTime = endTime - startTime;
+                System.out.println("Sent " + count + " records in " + sendTime + " millis.");
+                allTime += sendTime;
             }
-            for (Future<RecordMetadata> future : futures) {
-                future.get();
-                count++;
-            }
-            long endTime = System.currentTimeMillis();
-            long totalTime = endTime - startTime;
             long serializationTime = RawMobileDataIdSerializer.serializationTime.get() + RawMobileDataSerializer.serializationTime.get();
-            long compressionTime = RawMobileDataIdSerializer.compressionTime.get() + RawMobileDataSerializer.compressionTime.get();
-
-            System.out.println("Sent " + count + " records in " + totalTime + " millis out of which compression took " + compressionTime + " millis and serialization took " + serializationTime + " millis.");
+            System.out.println("On average total time taken " + (allTime / 10) + " millis out of which average serialization time " + (serializationTime / 10) + " millis.");
 
         } finally {
             producer.close();
