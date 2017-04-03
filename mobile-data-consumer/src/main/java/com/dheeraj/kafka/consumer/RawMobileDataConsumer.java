@@ -19,7 +19,7 @@ public class RawMobileDataConsumer {
         String groupId = "mobileConsumerGroup";
 
         Properties productConsumerProperties = new Properties();
-        productConsumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        productConsumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "104.199.14.241:9092");
         productConsumerProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "com.dheeraj.kafka.consumer.deserializers.RawMobileDataIdDeserializer");
         productConsumerProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "com.dheeraj.kafka.consumer.deserializers.RawMobileDataDeserializer");
         productConsumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
