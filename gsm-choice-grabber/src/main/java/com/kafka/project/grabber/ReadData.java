@@ -15,8 +15,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,9 +27,7 @@ public class ReadData {
     private static final int bufferSize = 2048;
 
     class AllMobiles implements Serializable {
-
         private List<RawMobileData> rawMobileData = new ArrayList<>();
-
         List<RawMobileData> getRawMobileData() {
             return rawMobileData;
         }
@@ -41,7 +37,7 @@ public class ReadData {
         Schema<AllMobiles> schema = RuntimeSchema.getSchema(AllMobiles.class);
         AllMobiles allMobiles = schema.newMessage();
         long startTime = System.currentTimeMillis();
-        byte[] bytes = Files.readAllBytes(Paths.get(ReadData.class.getClassLoader().getResource("mobileProto.data").toURI()));
+        byte[] bytes = IOUtils.toByteArray(ReadData.class.getClassLoader().getResourceAsStream("mobileProto.data"));
         long endTime = System.currentTimeMillis();
         long diff = endTime - startTime;
         ProtostuffIOUtil.mergeFrom(bytes, allMobiles, schema);
