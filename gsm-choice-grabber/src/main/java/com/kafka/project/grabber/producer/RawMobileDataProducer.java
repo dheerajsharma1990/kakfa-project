@@ -51,7 +51,7 @@ public class RawMobileDataProducer {
 
     private static Properties getMyProductTopicConfigProperties() {
         Properties configProperties = new Properties();
-        configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "104.199.14.241:9092");
+        configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "10.132.0.2:9092");
         configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "com.kafka.project.grabber.serializers.RawMobileDataIdSerializer");
         configProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "com.kafka.project.grabber.serializers.RawMobileDataSerializer");
         configProperties.put(ProducerConfig.LINGER_MS_CONFIG, "100");
