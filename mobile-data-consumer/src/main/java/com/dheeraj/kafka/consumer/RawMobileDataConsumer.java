@@ -5,7 +5,6 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.common.TopicPartition;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +18,7 @@ public class RawMobileDataConsumer {
         String groupId = "mobileConsumerGroup";
 
         Properties productConsumerProperties = new Properties();
-        productConsumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "104.199.14.241:9092");
+        productConsumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "10.132.0.2:9092,10.132.0.3:9092,10.132.0.4:9092");
         productConsumerProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "com.dheeraj.kafka.consumer.deserializers.RawMobileDataIdDeserializer");
         productConsumerProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "com.dheeraj.kafka.consumer.deserializers.RawMobileDataDeserializer");
         productConsumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
@@ -29,9 +28,7 @@ public class RawMobileDataConsumer {
         KafkaConsumer<String, RawMobileData> productKafkaConsumer = new KafkaConsumer<>(productConsumerProperties);
         List<RawMobileData> rawMobileDatas = new ArrayList<>();
         try {
-            //productKafkaConsumer.subscribe(Arrays.asList(topicName));
-            productKafkaConsumer.assign(Arrays.asList(new TopicPartition(topicName, 0)));
-            productKafkaConsumer.seek(new TopicPartition(topicName, 0), 0);
+            productKafkaConsumer.subscribe(Arrays.asList(topicName));
             long startTime = System.currentTimeMillis();
             while (rawMobileDatas.size() != 13998) {
                 ConsumerRecords<String, RawMobileData> rawMobileDataConsumerRecords = productKafkaConsumer.poll(200);

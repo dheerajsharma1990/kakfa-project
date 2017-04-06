@@ -1,0 +1,11 @@
+<assembly>
+    <id>bin</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <fileSets>
+        <fileSet>
+            <directory>${project.build.directory}/appassembler/</directory>
+        </fileSet>
+    </fileSets>
+</assembly>
